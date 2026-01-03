@@ -15,6 +15,7 @@ def subset_sum_dict(players):
 
     return result
 
+
 def exact_shapley(players, cost_fn):
     n = len(players)
     shap = dict.fromkeys(players, 0.0)
@@ -39,7 +40,7 @@ def random_shapley(players, cost_fn, m):
     permutations = list(itertools.permutations(players))
     for i in range(m):
         prefix = []
-        rng = random.randint(0, len(permutations)-1)
+        rng = random.randint(0, len(permutations) - 1)
         perm = permutations[rng]
 
         for p in perm:
@@ -69,15 +70,17 @@ def random_airport_instance(n, seed=0, max_cost=100):
 
     return players_costs
 
+
 players_costs = {'A': 30, 'B': 40, 'C': 50}
 players = list(players_costs.keys())
 costs = subset_sum_dict(players_costs)
 
+
 def c(S):
     return costs.get(frozenset(S), float('inf'))
 
-def main():
 
+def main():
     # --- Fixed example ---
     print("=== Fixed example ===")
     fixed_players_costs = {'A': 30, 'B': 40, 'C': 50}
@@ -115,7 +118,7 @@ def main():
         for p in airport_players:
             print(f"  {p}: {exact[p]}")
 
-        for i in range(1, math.factorial(n)+1):
+        for i in range(1, math.factorial(n) + 1):
             est = random_shapley(airport_players, airport_c, i)
             print(f"Random Shapley estimates (m={i}):")
             for p in airport_players:
