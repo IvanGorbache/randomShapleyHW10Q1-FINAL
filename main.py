@@ -1,9 +1,8 @@
 import itertools, random, math
 
 
-def subset_sum_dict(players):
+def subset_sum_dict(players, noise=0.0):
     result = {}
-
     keys = list(players.keys())
     n = len(keys)
 
@@ -11,10 +10,14 @@ def subset_sum_dict(players):
         for subset in itertools.combinations(keys, r):
             subset_key = frozenset(subset)
             subset_sum = sum(players[player] for player in subset)
+
+            # add noise for subsets larger than 1
+            if noise > 0 and len(subset) > 1:
+                subset_sum += random.uniform(-noise, 0)
+
             result[subset_key] = subset_sum
 
     return result
-
 
 def exact_shapley(players, cost_fn):
     n = len(players)
@@ -73,7 +76,7 @@ def random_airport_instance(n, seed=0, max_cost=100):
 
 players_costs = {'A': 30, 'B': 40, 'C': 50}
 players = list(players_costs.keys())
-costs = subset_sum_dict(players_costs)
+costs = subset_sum_dict(players_costs,5)
 
 
 def c(S):
@@ -81,11 +84,12 @@ def c(S):
 
 
 def main():
+    print(costs)
     # --- Fixed example ---
     print("=== Fixed example ===")
-    fixed_players_costs = {'A': 30, 'B': 40, 'C': 50}
+    fixed_players_costs = {'A': 10, 'B': 15, 'C': 25}
     fixed_players = list(fixed_players_costs.keys())
-    fixed_costs = subset_sum_dict(fixed_players_costs)
+    fixed_costs = subset_sum_dict(fixed_players_costs, 10)
 
     def fixed_c(S):
         return fixed_costs.get(frozenset(S), float('inf'))
@@ -107,7 +111,7 @@ def main():
         airport_players_costs = random_airport_instance(n, seed=42)
         print("Players' costs:", airport_players_costs)
         airport_players = list(airport_players_costs.keys())
-        airport_costs = subset_sum_dict(airport_players_costs)
+        airport_costs = subset_sum_dict(airport_players_costs, 10)
 
         def airport_c(S):
             return airport_costs.get(frozenset(S), float('inf'))
