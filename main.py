@@ -1,7 +1,7 @@
 import itertools, random, math
 
 
-def subset_sum_dict(players):
+def subset_sum_dict(players, fixed_cost=20):
     result = {}
 
     keys = list(players.keys())
@@ -9,11 +9,15 @@ def subset_sum_dict(players):
 
     for r in range(n + 1):
         for subset in itertools.combinations(keys, r):
-            subset_key = frozenset(subset)
-            subset_sum = sum(players[player] for player in subset)
-            result[subset_key] = subset_sum
+            S = frozenset(subset)
+
+            if not S:
+                result[S] = 0
+            else:
+                result[S] = sum(players[p] for p in S) + fixed_cost
 
     return result
+
 
 
 def exact_shapley(players, cost_fn):
@@ -51,7 +55,7 @@ def random_shapley(players, cost_fn, m):
             prefix.append(p)
     # average over all permutations
     for p in shap:
-        shap[p] /= len(permutations)
+        shap[p] /= m
     return shap
 
 
