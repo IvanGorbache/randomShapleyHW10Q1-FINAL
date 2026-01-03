@@ -51,7 +51,7 @@ def random_shapley(players, cost_fn, m):
             prefix.append(p)
     # average over all permutations
     for p in shap:
-        shap[p] /= len(permutations)
+        shap[p] /= m
     return shap
 
 
