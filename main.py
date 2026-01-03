@@ -3,19 +3,16 @@ import itertools, random, math
 
 def subset_sum_dict(players, fixed_cost=20):
     result = {}
-
     keys = list(players.keys())
-    n = len(keys)
 
-    for r in range(n + 1):
+    for r in range(len(keys) + 1):
         for subset in itertools.combinations(keys, r):
             S = frozenset(subset)
-
             if not S:
                 result[S] = 0
             else:
-                result[S] = sum(players[p] for p in S) + fixed_cost
-
+                result[S] = sum(players[p] for p in S) \
+                            + fixed_cost * (len(S) - 1) / (len(keys) - 1)
     return result
 
 
